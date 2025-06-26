@@ -60,7 +60,14 @@ let operatorSymbol = "";
 // Event Listeners
 numbers.forEach((button) => {
   button.addEventListener("click", () => {
-    inputValue += button.textContent;
+    // If inputValue is 0, replace it with a new input
+    if (inputValue === "0") {
+      inputValue = button.textContent;
+    } else {
+      inputValue += button.textContent;
+    }
+
+    // Do not exceed 15 characters when inputing numbers
     if (inputValue.length <= 15) {
       currentInput.textContent = inputValue;
     }

@@ -53,7 +53,9 @@ let previousInput = document.querySelector(".previous");
 let inputValue = "";
 
 let firstOperand = "";
+let secondOperand = "";
 let operator = "";
+let operatorSymbol = "";
 
 numbers.forEach((button) => {
   button.addEventListener("click", () => {
@@ -66,13 +68,13 @@ numbers.forEach((button) => {
 
 // Converts symbol to a usable operator
 function convertOperator(symbol) {
-  if (symbol === "&#247;") {
+  if (symbol === "÷") {
     return "/";
-  } else if (symbol === "&#215;") {
+  } else if (symbol === "x") {
     return "*";
-  } else if (symbol === "&#8722;") {
+  } else if (symbol === "-") {
     return "-";
-  } else if (symbol === "&#43;") {
+  } else if (symbol === "+") {
     return "+";
   } else {
     return "Error: Operator";
@@ -90,6 +92,7 @@ operators.forEach((button) => {
     firstOperand = parseFloat(inputValue);
 
     // Convert symbol and save operator to operator
+    operatorSymbol = button.textContent;
     operator = convertOperator(button.textContent);
 
     // Show on display
@@ -100,3 +103,54 @@ operators.forEach((button) => {
     inputValue = "";
   });
 });
+
+equals.addEventListener("click", () => {
+  if (inputValue === "") {
+    return;
+  }
+
+  // Save second number to secondOperand
+  secondOperand = parseFloat(inputValue);
+
+  // Show on display
+  previousInput.textContent = `${firstOperand} ${operatorSymbol} ${secondOperand}`;
+
+  // Assign anser to currentInput and continue calculations
+  const answer = operate(operator, firstOperand, secondOperand);
+  currentInput.textContent = answer;
+  inputValue = answer.toString();
+});
+
+function operate(operator, a, b) {
+  if (operator === "+") {
+    return addInput(a, b);
+  } else if (operator === "-") {
+    return subtractInput(a, b);
+  } else if (operator === "*") {
+    return multiplyInput(a, b);
+  } else if (operator === "/") {
+    return divideInput(a, b);
+  } else {
+    return "Error";
+  }
+}
+
+function addInput(a, b) {
+  return a + b;
+}
+
+function subtractInput(a, b) {
+  return a - b;
+}
+
+function multiplyInput(a, b) {
+  return a * b;
+}
+
+function divideInput(a, b) {
+  if (b === 0) {
+    return "Error";
+  } else {
+    return a / b;
+  }
+}

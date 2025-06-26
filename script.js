@@ -49,9 +49,7 @@ operators.forEach((button) => {
     operator = convertOperator(button.textContent);
 
     // Show on display
-    previousInput.textContent = `${formatNumber(firstOperand)} ${
-      button.textContent
-    }`;
+    previousInput.textContent = `${inputValue} ${button.textContent}`;
     currentInput.textContent = "";
 
     // Clear inputValue to type a fresh number
@@ -196,14 +194,14 @@ decimal.addEventListener("click", () => {
 });
 
 // Format numbers to ensure no more than 6 decimal places show
-function formatNumber(num, showApproximation = true) {
+function formatNumber(num) {
   if (!isFinite(num)) {
     return "Error";
   }
 
   let str = num.toString();
 
-  if (Math.abs(num) >= 1e4 || (Math.abs(num) < 1e-4 && num !== 0)) {
+  if (Math.abs(num) >= 1e12 || (Math.abs(num) < 1e-12 && num !== 0)) {
     return num.toExponential(4);
   } else {
     str = parseFloat(num.toPrecision(12)).toString();

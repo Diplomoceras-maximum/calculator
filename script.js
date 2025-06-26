@@ -19,17 +19,18 @@ let operatorSymbol = "";
 // Event Listeners
 numbers.forEach((button) => {
   button.addEventListener("click", () => {
+    // Do not exceed 12 characters when inputing numbers
+    if (inputValue.length >= 12) {
+      return;
+    }
+
     if (inputValue === "0") {
       // If inputValue is 0, replace it with a new input
       inputValue = button.textContent;
     } else {
       inputValue += button.textContent;
     }
-
-    // Do not exceed 15 characters when inputing numbers
-    if (inputValue.length <= 15) {
-      currentInput.textContent = formatCurrentDisplay(inputValue);
-    }
+    currentInput.textContent = inputValue;
   });
 });
 
@@ -60,10 +61,7 @@ operators.forEach((button) => {
 
 equals.addEventListener("click", () => {
   // If no input then do nothing
-  if (inputValue === "") {
-    return;
-  }
-  if (operator === "") {
+  if (inputValue === "" || operator === "") {
     return;
   }
 
@@ -77,9 +75,9 @@ equals.addEventListener("click", () => {
 
   // Assign anser to currentInput and continue calculations
   const answer = operate(operator, firstOperand, secondOperand);
-  currentInput.textContent = formatNumber(answer, false);
-  inputValue = answer.toString();
-  currentInput.textContent = formatCurrentDisplay(inputValue);
+  const formatAnswer = formatNumber(answer, false);
+  inputValue = formatAnswer;
+  currentInput.textContent = formatAnswer;
 });
 
 // Symbol Converter Function (converts symbols to operators js understands)
@@ -177,42 +175,26 @@ plusMinus.addEventListener("click", () => {
   } else {
     inputValue = "-" + inputValue;
   }
-  currentInput.textContent = formatCurrentDisplay(inputValue);
+  currentInput.textContent = inputValue;
 });
 
 // Format numbers to ensure no more than 6 decimal places show
 function formatNumber(num, showApproximation = true) {
-  if (!showApproximation) {
-    return num.toString();
+  if (!isFinite(num)) {
+    return "Error";
   }
 
-  if (Math.abs(num) >= 1e8 || (Math.abs(num) < 1e-4 && num !== 0)) {
+  let str = num.toString();
+
+  if (Math.abs(num) >= 1e4 || (Math.abs(num) < 1e-4 && num !== 0)) {
     return num.toExponential(4);
+  } else {
+    str = parseFloat(num.toPrecision(12)).toString();
   }
 
-  const rounded = parseFloat(num.toFixed(6));
-  const original = Number(num);
-  return rounded !== original ? `≈${rounded}` : `${rounded}`;
-}
-
-// Format currentInput
-function formatCurrentDisplay(value) {
-  let str = value.toString();
-
-  // Trim trailing zeroes
+  // Trim trailing zeroes and decimals
   str = str.replace(/\.0+$|(\.\d*?)0+$/, "$1");
 
-  const isNegative = str.startsWith("-");
-  const maxLength = 12;
-
-  // Keep the "-" intact and only slice the number part if too long
-  if (str.length > maxLength) {
-    if (isNegative) {
-      return "-" + str.slice(1, maxLength);
-    } else {
-      return str.slice(0, maxLength);
-    }
-  }
-
-  return str;
+  // Ensure max 12 characters
+  return str.length > 12 ? str.slice(0, 12) : str;
 }

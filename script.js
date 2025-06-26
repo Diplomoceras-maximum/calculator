@@ -37,7 +37,7 @@
 //   }
 // }
 
-console.log(operate(operator, num1, num2));
+// console.log(operate(operator, num1, num2));
 
 const numbers = document.querySelectorAll(".number");
 const operators = document.querySelectorAll(".operator");
@@ -51,6 +51,9 @@ let currentInput = document.querySelector(".current");
 let previousInput = document.querySelector(".previous");
 
 let inputValue = "";
+
+let firstOperand = "";
+let operator = "";
 
 numbers.forEach((button) => {
   button.addEventListener("click", () => {
@@ -75,3 +78,25 @@ function convertOperator(symbol) {
     return "Error: Operator";
   }
 }
+
+operators.forEach((button) => {
+  button.addEventListener("click", () => {
+    // If no input then do nothing
+    if (inputValue === "") {
+      return;
+    }
+
+    // Save first number to firstOperand
+    firstOperand = parseFloat(inputValue);
+
+    // Convert symbol and save operator to operator
+    operator = convertOperator(button.textContent);
+
+    // Show on display
+    previousInput.textContent = `${firstOperand} ${button.textContent}`;
+    currentInput.textContent = "";
+
+    // Clear inputValue to type a fresh number
+    inputValue = "";
+  });
+});

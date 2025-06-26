@@ -60,3 +60,18 @@ numbers.forEach((button) => {
     }
   });
 });
+
+// Converts symbol to a usable operator
+function convertOperator(symbol) {
+  if (symbol === "&#247;") {
+    return "/";
+  } else if (symbol === "&#215;") {
+    return "*";
+  } else if (symbol === "&#8722;") {
+    return "-";
+  } else if (symbol === "&#43;") {
+    return "+";
+  } else {
+    return "Error: Operator";
+  }
+}

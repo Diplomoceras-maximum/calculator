@@ -60,8 +60,8 @@ let operatorSymbol = "";
 // Event Listeners
 numbers.forEach((button) => {
   button.addEventListener("click", () => {
-    // If inputValue is 0, replace it with a new input
     if (inputValue === "0") {
+      // If inputValue is 0, replace it with a new input
       inputValue = button.textContent;
     } else {
       inputValue += button.textContent;
@@ -89,7 +89,9 @@ operators.forEach((button) => {
     operator = convertOperator(button.textContent);
 
     // Show on display
-    previousInput.textContent = `${firstOperand} ${button.textContent}`;
+    previousInput.textContent = `${formatNumber(firstOperand)} ${
+      button.textContent
+    }`;
     currentInput.textContent = "";
 
     // Clear inputValue to type a fresh number
@@ -110,11 +112,13 @@ equals.addEventListener("click", () => {
   secondOperand = parseFloat(inputValue);
 
   // Show on display
-  previousInput.textContent = `${firstOperand} ${operatorSymbol} ${secondOperand}`;
+  previousInput.textContent = `${formatNumber(
+    firstOperand
+  )} ${operatorSymbol} ${formatNumber(secondOperand)}`;
 
   // Assign anser to currentInput and continue calculations
   const answer = operate(operator, firstOperand, secondOperand);
-  currentInput.textContent = answer;
+  currentInput.textContent = formatNumber(answer);
   inputValue = answer.toString();
 });
 
@@ -208,3 +212,13 @@ plusMinus.addEventListener("click", () => {
   }
   currentInput.textContent = inputValue;
 });
+
+// Format numbers to ensure no more than 6 decimal places show
+function formatNumber(num) {
+  if (Math.abs(num) >= 1e8 || (Math.abs(num) < 1e-4 && num !== 0)) {
+    return `≈${num.toExponential(4)}`;
+  }
+  const rounded = parseFloat(num.toFixed(6));
+  const original = Number(num);
+  return rounded !== original ? `≈${rounded}` : `${rounded}`;
+}

@@ -185,3 +185,14 @@ clear.addEventListener("click", () => {
   currentInput.textContent = "0";
   previousInput.textContent = "0";
 });
+
+// Delete last character
+undo.addEventListener("click", () => {
+  if (inputValue.length > 1) {
+    inputValue = inputValue.slice(0, -1);
+    currentInput.textContent = inputValue;
+  } else if (inputValue.length === 1) {
+    inputValue = "";
+    currentInput.textContent = "0";
+  }
+});

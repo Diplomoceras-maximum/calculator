@@ -39,6 +39,7 @@
 
 // console.log(operate(operator, num1, num2));
 
+// Variables
 const numbers = document.querySelectorAll(".number");
 const operators = document.querySelectorAll(".operator");
 const equals = document.querySelector(".equals");
@@ -47,16 +48,16 @@ const plusMinus = document.querySelector(".plus-minus");
 const clear = document.querySelector(".clear");
 const undo = document.querySelector(".undo");
 
-let currentInput = document.querySelector(".current");
-let previousInput = document.querySelector(".previous");
+const currentInput = document.querySelector(".current");
+const previousInput = document.querySelector(".previous");
 
 let inputValue = "";
-
 let firstOperand = "";
 let secondOperand = "";
 let operator = "";
 let operatorSymbol = "";
 
+// Event Listeners
 numbers.forEach((button) => {
   button.addEventListener("click", () => {
     inputValue += button.textContent;
@@ -65,21 +66,6 @@ numbers.forEach((button) => {
     }
   });
 });
-
-// Converts symbol to a usable operator
-function convertOperator(symbol) {
-  if (symbol === "÷") {
-    return "/";
-  } else if (symbol === "x") {
-    return "*";
-  } else if (symbol === "-") {
-    return "-";
-  } else if (symbol === "+") {
-    return "+";
-  } else {
-    return "Error: Operator";
-  }
-}
 
 operators.forEach((button) => {
   button.addEventListener("click", () => {
@@ -125,6 +111,22 @@ equals.addEventListener("click", () => {
   inputValue = answer.toString();
 });
 
+// Symbol Converter Function (converts symbols to operators js understands)
+function convertOperator(symbol) {
+  if (symbol === "÷") {
+    return "/";
+  } else if (symbol === "x") {
+    return "*";
+  } else if (symbol === "-") {
+    return "-";
+  } else if (symbol === "+") {
+    return "+";
+  } else {
+    return "Error: Operator";
+  }
+}
+
+// Operation Function (calls the respective arithmetic function)
 function operate(operator, a, b) {
   if (operator === "+") {
     return addInput(a, b);
@@ -139,21 +141,25 @@ function operate(operator, a, b) {
   }
 }
 
+// Addition Function
 function addInput(a, b) {
   return a + b;
 }
 
+// Subtraction Function
 function subtractInput(a, b) {
   return a - b;
 }
 
+// Multiplication Function
 function multiplyInput(a, b) {
   return a * b;
 }
 
+// Division Function
 function divideInput(a, b) {
   if (b === 0) {
-    return "Error: Cannot divide by 0";
+    return "0";
   } else {
     return a / b;
   }

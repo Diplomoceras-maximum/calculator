@@ -44,10 +44,15 @@ h1 {
   box-shadow: 0 4px rgba(0, 0, 0, 0.3);
   transition: all 0.1s ease;
   font-weight: bold;
-  font-size: 32px;
+  font-size: 28px;
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.clear,
+.undo {
+  font-size: 24px;
 }
 
 .small-btn:active,

@@ -75,9 +75,15 @@ equals.addEventListener("click", () => {
 
   // Assign anser to currentInput and continue calculations
   const answer = operate(operator, firstOperand, secondOperand);
-  const formatAnswer = formatNumber(answer, false);
-  inputValue = formatAnswer;
-  currentInput.textContent = formatAnswer;
+
+  if (answer === "oh_no_you_didnt") {
+    currentInput.textContent = "😖";
+    inputValue = "0";
+  } else {
+    const formatAnswer = formatNumber(answer, false);
+    inputValue = formatAnswer;
+    currentInput.textContent = formatAnswer;
+  }
 });
 
 // Symbol Converter Function (converts symbols to operators js understands)
@@ -128,7 +134,7 @@ function multiplyInput(a, b) {
 // Division Function
 function divideInput(a, b) {
   if (b === 0) {
-    return "0";
+    return "oh_no_you_didnt";
   } else {
     return a / b;
   }

@@ -196,3 +196,15 @@ undo.addEventListener("click", () => {
     currentInput.textContent = "0";
   }
 });
+
+// Toggle between positive or negative number
+plusMinus.addEventListener("click", () => {
+  if (inputValue.includes("-")) {
+    inputValue = inputValue.slice(1);
+  } else if (inputValue === "0" || inputValue === "") {
+    return; // prevents toggle on empty and 0 inputValue
+  } else {
+    inputValue = "-" + inputValue;
+  }
+  currentInput.textContent = inputValue;
+});

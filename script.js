@@ -184,6 +184,18 @@ plusMinus.addEventListener("click", () => {
   currentInput.textContent = inputValue;
 });
 
+// Add decimal point
+decimal.addEventListener("click", () => {
+  if (!inputValue.includes(".")) {
+    if (inputValue === "") {
+      inputValue = "0";
+    } else {
+      inputValue += ".";
+    }
+    currentInput.textContent = inputValue;
+  }
+});
+
 // Format numbers to ensure no more than 6 decimal places show
 function formatNumber(num, showApproximation = true) {
   if (!isFinite(num)) {

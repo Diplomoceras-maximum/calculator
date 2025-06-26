@@ -105,7 +105,11 @@ operators.forEach((button) => {
 });
 
 equals.addEventListener("click", () => {
+  // If no input then do nothing
   if (inputValue === "") {
+    return;
+  }
+  if (operator === "") {
     return;
   }
 
@@ -131,7 +135,7 @@ function operate(operator, a, b) {
   } else if (operator === "/") {
     return divideInput(a, b);
   } else {
-    return "Error";
+    return "Error: Calling operator functions";
   }
 }
 
@@ -149,7 +153,7 @@ function multiplyInput(a, b) {
 
 function divideInput(a, b) {
   if (b === 0) {
-    return "Error";
+    return "Error: Cannot divide by 0";
   } else {
     return a / b;
   }

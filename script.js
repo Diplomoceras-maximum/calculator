@@ -159,13 +159,12 @@ undo.addEventListener("click", () => {
   if (inputValue.length > 1) {
     inputValue = inputValue.slice(0, -1);
 
-    let num = parseFloat(inputValue);
-
-    if (!isNaN(num)) {
-      currentInput.textContent = formatCurrentDisplay(inputValue);
-    } else {
-      currentInput.textContent = formatCurrentDisplay(inputValue || "0");
+    if (inputValue === "-" || inputValue === "") {
+      inputValue = "0";
+      currentInput.textContent = inputValue;
+      return;
     }
+    currentInput.textContent = inputValue;
   } else {
     inputValue = "";
     currentInput.textContent = "0";

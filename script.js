@@ -38,3 +38,25 @@ function operate(operator, a, b) {
 }
 
 console.log(operate(operator, num1, num2));
+
+const numbers = document.querySelectorAll(".number");
+const operators = document.querySelectorAll(".operator");
+const equals = document.querySelector(".equals");
+const decimal = document.querySelector(".decimal");
+const plusMinus = document.querySelector(".plus-minus");
+const clear = document.querySelector(".clear");
+const undo = document.querySelector(".undo");
+
+let currentInput = document.querySelector(".current");
+let previousInput = document.querySelector(".previous");
+
+let inputValue = "";
+
+numbers.forEach((button) => {
+  button.addEventListener("click", () => {
+    inputValue += button.textContent;
+    if (inputValue.length <= 15) {
+      currentInput.textContent = inputValue;
+    }
+  });
+});

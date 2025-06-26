@@ -1,44 +1,3 @@
-// // Variables for calculations
-// let num1 = 5;
-// let operator = "+";
-// let num2 = 3;
-
-// function addInput(a, b) {
-//   return a + b;
-// }
-
-// function subtractInput(a, b) {
-//   return a - b;
-// }
-
-// function multiplyInput(a, b) {
-//   return a * b;
-// }
-
-// function divideInput(a, b) {
-//   if (b === 0) {
-//     return "Error";
-//   } else {
-//     return a / b;
-//   }
-// }
-
-// function operate(operator, a, b) {
-//   if (operator === "+") {
-//     return addInput(a, b);
-//   } else if (operator === "-") {
-//     return subtractInput(a, b);
-//   } else if (operator === "*") {
-//     return multiplyInput(a, b);
-//   } else if (operator === "/") {
-//     return divideInput(a, b);
-//   } else {
-//     return "Error";
-//   }
-// }
-
-// console.log(operate(operator, num1, num2));
-
 // Variables
 const numbers = document.querySelectorAll(".number");
 const operators = document.querySelectorAll(".operator");
@@ -69,7 +28,7 @@ numbers.forEach((button) => {
 
     // Do not exceed 15 characters when inputing numbers
     if (inputValue.length <= 15) {
-      currentInput.textContent = inputValue;
+      currentInput.textContent = formatCurrentDisplay(inputValue);
     }
   });
 });
@@ -118,8 +77,9 @@ equals.addEventListener("click", () => {
 
   // Assign anser to currentInput and continue calculations
   const answer = operate(operator, firstOperand, secondOperand);
-  currentInput.textContent = formatNumber(answer);
+  currentInput.textContent = formatNumber(answer, false);
   inputValue = answer.toString();
+  currentInput.textContent = formatCurrentDisplay(inputValue);
 });
 
 // Symbol Converter Function (converts symbols to operators js understands)
@@ -194,8 +154,15 @@ clear.addEventListener("click", () => {
 undo.addEventListener("click", () => {
   if (inputValue.length > 1) {
     inputValue = inputValue.slice(0, -1);
-    currentInput.textContent = inputValue;
-  } else if (inputValue.length === 1) {
+
+    let num = parseFloat(inputValue);
+
+    if (!isNaN(num)) {
+      currentInput.textContent = formatCurrentDisplay(inputValue);
+    } else {
+      currentInput.textContent = formatCurrentDisplay(inputValue || "0");
+    }
+  } else {
     inputValue = "";
     currentInput.textContent = "0";
   }
@@ -210,15 +177,42 @@ plusMinus.addEventListener("click", () => {
   } else {
     inputValue = "-" + inputValue;
   }
-  currentInput.textContent = inputValue;
+  currentInput.textContent = formatCurrentDisplay(inputValue);
 });
 
 // Format numbers to ensure no more than 6 decimal places show
-function formatNumber(num) {
-  if (Math.abs(num) >= 1e8 || (Math.abs(num) < 1e-4 && num !== 0)) {
-    return `≈${num.toExponential(4)}`;
+function formatNumber(num, showApproximation = true) {
+  if (!showApproximation) {
+    return num.toString();
   }
+
+  if (Math.abs(num) >= 1e8 || (Math.abs(num) < 1e-4 && num !== 0)) {
+    return num.toExponential(4);
+  }
+
   const rounded = parseFloat(num.toFixed(6));
   const original = Number(num);
   return rounded !== original ? `≈${rounded}` : `${rounded}`;
+}
+
+// Format currentInput
+function formatCurrentDisplay(value) {
+  let str = value.toString();
+
+  // Trim trailing zeroes
+  str = str.replace(/\.0+$|(\.\d*?)0+$/, "$1");
+
+  const isNegative = str.startsWith("-");
+  const maxLength = 12;
+
+  // Keep the "-" intact and only slice the number part if too long
+  if (str.length > maxLength) {
+    if (isNegative) {
+      return "-" + str.slice(1, maxLength);
+    } else {
+      return str.slice(0, maxLength);
+    }
+  }
+
+  return str;
 }

@@ -164,3 +164,17 @@ function divideInput(a, b) {
     return a / b;
   }
 }
+
+// Clear everything and reset to initial state
+clear.addEventListener("click", () => {
+  // Reset variables
+  inputValue = "";
+  firstOperand = "";
+  secondOperand = "";
+  operator = "";
+  operatorSymbol = "";
+
+  // Reset display
+  currentInput.textContent = "0";
+  previousInput.textContent = "0";
+});

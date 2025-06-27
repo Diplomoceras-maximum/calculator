@@ -155,8 +155,8 @@ clear.addEventListener("click", () => {
   operatorSymbol = "";
 
   // Reset display elements
-  currentInput.textContent = "0";
-  previousInput.textContent = "0";
+  currentInput.textContent = "";
+  previousInput.textContent = "";
 });
 
 // ================================
@@ -175,13 +175,13 @@ undo.addEventListener("click", () => {
     // If inputValue is "-" or empty, inputValue becomes 0
     if (inputValue === "-" || inputValue === "") {
       inputValue = "0";
-      currentInput.textContent = inputValue;
+      currentInput.textContent = "";
       return;
     }
     currentInput.textContent = inputValue;
   } else {
     inputValue = "0";
-    currentInput.textContent = inputValue;
+    currentInput.textContent = "";
   }
 });
 
@@ -206,7 +206,7 @@ decimal.addEventListener("click", () => {
   // If inputValue doesnt have a decimal point and isnt empty, add a decimal point
   if (!inputValue.includes(".")) {
     if (inputValue === "") {
-      inputValue = "0";
+      inputValue = "0.";
     } else {
       inputValue += ".";
     }

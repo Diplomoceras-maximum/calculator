@@ -51,24 +51,52 @@ numbers.forEach((button) => {
 // ================================
 operators.forEach((button) => {
   button.addEventListener("click", () => {
-    // If no input then do nothing
-    if (inputValue === "") {
+    const selectedOperatorSymbol = button.textContent;
+    const selectedOperator = convertOperator(selectedOperatorSymbol);
+
+    // If input is empty, but there is already a result, allow changing the operator
+    if (inputValue === "" && firstOperand !== "") {
+      operator = selectedOperator;
+      operatorSymbol = selectedOperatorSymbol;
+      previousInput.textContent = `${formatNumber(
+        firstOperand
+      )} ${operatorSymbol}`;
       return;
     }
 
-    // Save first number to firstOperand
-    firstOperand = parseFloat(inputValue);
+    if (inputValue !== "") {
+      if (firstOperand !== "" && operator !== "") {
+        // Perform calculation before applying new operator
+        secondOperand = parseFloat(inputValue);
+        const result = operate(operator, firstOperand, secondOperand);
 
-    // Convert symbol and save js friendly operator to operator
-    operatorSymbol = button.textContent;
-    operator = convertOperator(button.textContent);
+        let finalResult;
+        let displayValue;
 
-    // Show on display
-    previousInput.textContent = `${inputValue} ${button.textContent}`;
+        if (result === "oh_no_you_didnt") {
+          displayValue = "😖"; // Show emoji
+          finalResult = 0; // Internally treat it as 0
+        } else {
+          finalResult = result;
+          displayValue = formatNumber(result); // Only format if it's a real number
+        }
+
+        // Update internal and visual state
+        firstOperand = finalResult;
+        inputValue = "";
+        currentInput.textContent = displayValue;
+      } else {
+        firstOperand = parseFloat(inputValue);
+        inputValue = "";
+      }
+    }
+
+    operator = selectedOperator;
+    operatorSymbol = selectedOperatorSymbol;
+    previousInput.textContent = `${formatNumber(
+      firstOperand
+    )} ${operatorSymbol}`;
     currentInput.textContent = "";
-
-    // Clear inputValue to type a fresh number
-    inputValue = "";
   });
 });
 
@@ -93,14 +121,26 @@ equals.addEventListener("click", () => {
   const answer = operate(operator, firstOperand, secondOperand);
 
   // If divide by 0 display frown face, else format answer and display
+  let finalAnswer;
+  let displayAnswer;
+
   if (answer === "oh_no_you_didnt") {
-    currentInput.textContent = "😖";
-    inputValue = "0";
+    displayAnswer = "😖";
+    finalAnswer = 0;
   } else {
-    const formatAnswer = formatNumber(answer);
-    inputValue = formatAnswer;
-    currentInput.textContent = formatAnswer;
+    finalAnswer = answer;
+    displayAnswer = formatNumber(answer);
   }
+
+  // Update firstOperand with the answer so it doesn't double count later
+  firstOperand = finalAnswer;
+
+  // Clear operator since the calculation was completed
+  operator = "";
+  operatorSymbol = "";
+
+  inputValue = finalAnswer.toString();
+  currentInput.textContent = displayAnswer;
 });
 
 // ================================

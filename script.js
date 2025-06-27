@@ -123,6 +123,11 @@ clear.addEventListener("click", () => {
 // Undo/Delete Button Click Listener
 // ================================
 undo.addEventListener("click", () => {
+  // Prevent undo if a number is an exponential
+  if (inputValue.includes("e")) {
+    return;
+  }
+
   // If inputValue is longer than 1 charcacter remove 1 from the back
   if (inputValue.length > 1) {
     inputValue = inputValue.slice(0, -1);

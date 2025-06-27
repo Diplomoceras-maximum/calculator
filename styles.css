@@ -42,6 +42,7 @@ h1 {
   border-radius: 5px;
   border: 1px solid black;
   box-shadow: 0 4px rgba(0, 0, 0, 0.3);
+  background-color: #f5f5f5;
   transition: all 0.1s ease;
   font-weight: bold;
   font-size: 32px;
@@ -61,12 +62,12 @@ h1 {
   grid-column-start: 1;
   grid-column-end: 5;
   height: 135px;
-  background-color: lightgray;
+  background-color: #1f1f1f;
   border: 1px solid black;
   border-radius: 5px;
   display: flex;
   flex-direction: column;
-  box-shadow: 0 4px rgba(0, 0, 0, 0.3) inset;
+  box-shadow: 0 8px rgba(155, 155, 155, 0.3) inset;
 }
 
 .previous,
@@ -81,10 +82,13 @@ h1 {
 .current {
   font-size: 32px;
   font-weight: bold;
+  color: #f5f5f5;
 }
 
 .previous {
   font-size: 16px;
+  font-weight: 400;
+  color: lightgray;
 }
 
 .equals {
@@ -103,7 +107,7 @@ h1 {
 .operator {
   background-color: #333333;
   color: white;
-  box-shadow: 0 4px rgba(0, 0, 0, 0.6);
+  box-shadow: 0 4px rgba(0, 0, 0, 0.7);
 }
 
 .clear:active,

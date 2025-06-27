@@ -44,15 +44,10 @@ h1 {
   box-shadow: 0 4px rgba(0, 0, 0, 0.3);
   transition: all 0.1s ease;
   font-weight: bold;
-  font-size: 28px;
+  font-size: 32px;
   display: flex;
   justify-content: center;
   align-items: center;
-}
-
-.clear,
-.undo {
-  font-size: 24px;
 }
 
 .small-btn:active,
@@ -95,4 +90,27 @@ h1 {
 .equals {
   grid-column-start: 3;
   grid-column-end: 5;
+}
+
+.clear,
+.undo {
+  font-size: 24px;
+}
+
+.clear,
+.undo,
+.equals,
+.operator {
+  background-color: #333333;
+  color: white;
+  box-shadow: 0 4px rgba(0, 0, 0, 0.6);
+}
+
+.clear:active,
+.undo:active,
+.equals:active,
+.operator:active {
+  background-color: #1f1f1f;
+  box-shadow: 0 2px rgba(0, 0, 0, 0.8);
+  transform: translateY(2px);
 }

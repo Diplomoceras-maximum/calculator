@@ -1,22 +1,34 @@
-// Variables
+// ================================
+// Element Selectors
+// ================================
+
+// Number and operator buttons
 const numbers = document.querySelectorAll(".number");
 const operators = document.querySelectorAll(".operator");
+
+// Special buttons
 const equals = document.querySelector(".equals");
 const decimal = document.querySelector(".decimal");
 const plusMinus = document.querySelector(".plus-minus");
 const clear = document.querySelector(".clear");
 const undo = document.querySelector(".undo");
 
+// Display elements
 const currentInput = document.querySelector(".current");
 const previousInput = document.querySelector(".previous");
 
-let inputValue = "";
-let firstOperand = "";
-let secondOperand = "";
-let operator = "";
-let operatorSymbol = "";
+// ================================
+// State Variables
+// ================================
+let inputValue = ""; // Current number being typed
+let firstOperand = ""; // First number in the operation
+let secondOperand = ""; // Second number in the operation
+let operator = ""; // Javascript perator in the operation (+, -, *, /)
+let operatorSymbol = ""; // Display operator (÷, x, -, +)
 
-// Event Listeners
+// ================================
+// Number Button Click Listener
+// ================================
 numbers.forEach((button) => {
   button.addEventListener("click", () => {
     // Do not exceed 12 characters when inputing numbers
@@ -24,8 +36,8 @@ numbers.forEach((button) => {
       return;
     }
 
+    // If inputValue is 0, replace it with a new input
     if (inputValue === "0") {
-      // If inputValue is 0, replace it with a new input
       inputValue = button.textContent;
     } else {
       inputValue += button.textContent;
@@ -34,6 +46,9 @@ numbers.forEach((button) => {
   });
 });
 
+// ================================
+// Operator Button Click Listener
+// ================================
 operators.forEach((button) => {
   button.addEventListener("click", () => {
     // If no input then do nothing
@@ -44,7 +59,7 @@ operators.forEach((button) => {
     // Save first number to firstOperand
     firstOperand = parseFloat(inputValue);
 
-    // Convert symbol and save operator to operator
+    // Convert symbol and save js friendly operator to operator
     operatorSymbol = button.textContent;
     operator = convertOperator(button.textContent);
 
@@ -57,6 +72,9 @@ operators.forEach((button) => {
   });
 });
 
+// ================================
+// Equals Button Click Listener
+// ================================
 equals.addEventListener("click", () => {
   // If no input then do nothing
   if (inputValue === "" || operator === "") {
@@ -71,20 +89,91 @@ equals.addEventListener("click", () => {
     firstOperand
   )} ${operatorSymbol} ${formatNumber(secondOperand)}`;
 
-  // Assign anser to currentInput and continue calculations
+  // Assign answer to currentInput and continue calculations
   const answer = operate(operator, firstOperand, secondOperand);
 
+  // If divide by 0 display frown face, else format answer and display
   if (answer === "oh_no_you_didnt") {
     currentInput.textContent = "😖";
     inputValue = "0";
   } else {
-    const formatAnswer = formatNumber(answer, false);
+    const formatAnswer = formatNumber(answer);
     inputValue = formatAnswer;
     currentInput.textContent = formatAnswer;
   }
 });
 
-// Symbol Converter Function (converts symbols to operators js understands)
+// ================================
+// Clear Button Click Listener
+// ================================
+clear.addEventListener("click", () => {
+  // Reset state variables
+  inputValue = "";
+  firstOperand = "";
+  secondOperand = "";
+  operator = "";
+  operatorSymbol = "";
+
+  // Reset display elements
+  currentInput.textContent = "0";
+  previousInput.textContent = "0";
+});
+
+// ================================
+// Undo/Delete Button Click Listener
+// ================================
+undo.addEventListener("click", () => {
+  // If inputValue is longer than 1 charcacter remove 1 from the back
+  if (inputValue.length > 1) {
+    inputValue = inputValue.slice(0, -1);
+
+    // If inputValue is "-" or empty, inputValue becomes 0
+    if (inputValue === "-" || inputValue === "") {
+      inputValue = "0";
+      currentInput.textContent = inputValue;
+      return;
+    }
+    currentInput.textContent = inputValue;
+  } else {
+    inputValue = "0";
+    currentInput.textContent = inputValue;
+  }
+});
+
+// ================================
+// Plus-Minus Button Click Listener
+// ================================
+plusMinus.addEventListener("click", () => {
+  if (inputValue.includes("-")) {
+    inputValue = inputValue.slice(1); // If inputValue has a minus, remove it
+  } else if (inputValue === "0" || inputValue === "") {
+    return; // prevents toggle on empty and 0 inputValue
+  } else {
+    inputValue = "-" + inputValue; // Else convert inputValue to a minus
+  }
+  currentInput.textContent = inputValue;
+});
+
+// ================================
+// Decimal Button Click Listener
+// ================================
+decimal.addEventListener("click", () => {
+  // If inputValue doesnt have a decimal point and isnt empty, add a decimal point
+  if (!inputValue.includes(".")) {
+    if (inputValue === "") {
+      inputValue = "0";
+    } else {
+      inputValue += ".";
+    }
+    currentInput.textContent = inputValue;
+  }
+});
+
+// ================================
+// Utility Functions
+// ================================
+
+// Convert display symbol to a javascript usable operator
 function convertOperator(symbol) {
   if (symbol === "÷") {
     return "/";
@@ -99,7 +188,7 @@ function convertOperator(symbol) {
   }
 }
 
-// Operation Function (calls the respective arithmetic function)
+// Calls the respective arithmetic function
 function operate(operator, a, b) {
   if (operator === "+") {
     return addInput(a, b);
@@ -138,78 +227,22 @@ function divideInput(a, b) {
   }
 }
 
-// Clear everything and reset to initial state
-clear.addEventListener("click", () => {
-  // Reset variables
-  inputValue = "";
-  firstOperand = "";
-  secondOperand = "";
-  operator = "";
-  operatorSymbol = "";
-
-  // Reset display
-  currentInput.textContent = "0";
-  previousInput.textContent = "0";
-});
-
-// Delete last character
-undo.addEventListener("click", () => {
-  if (inputValue.length > 1) {
-    inputValue = inputValue.slice(0, -1);
-
-    if (inputValue === "-" || inputValue === "") {
-      inputValue = "0";
-      currentInput.textContent = inputValue;
-      return;
-    }
-    currentInput.textContent = inputValue;
-  } else {
-    inputValue = "";
-    currentInput.textContent = "0";
-  }
-});
-
-// Toggle between positive or negative number
-plusMinus.addEventListener("click", () => {
-  if (inputValue.includes("-")) {
-    inputValue = inputValue.slice(1);
-  } else if (inputValue === "0" || inputValue === "") {
-    return; // prevents toggle on empty and 0 inputValue
-  } else {
-    inputValue = "-" + inputValue;
-  }
-  currentInput.textContent = inputValue;
-});
-
-// Add decimal point
-decimal.addEventListener("click", () => {
-  if (!inputValue.includes(".")) {
-    if (inputValue === "") {
-      inputValue = "0";
-    } else {
-      inputValue += ".";
-    }
-    currentInput.textContent = inputValue;
-  }
-});
-
-// Format numbers to ensure no more than 6 decimal places show
+// Format numbers to remove unnecessary 0s and limit length of long numbers including decimals
 function formatNumber(num) {
-  if (!isFinite(num)) {
-    return "Error";
-  }
-
-  let str = num.toString();
-
+  // Numbers more than 12 characters +/- are converted to exponential (4sf)
   if (Math.abs(num) >= 1e12 || (Math.abs(num) < 1e-12 && num !== 0)) {
     return num.toExponential(4);
   } else {
-    str = parseFloat(num.toPrecision(12)).toString();
+    let str = parseFloat(num.toPrecision(12)).toString(); // Else format number to 12 characters
+
+    // Trim trailing zeroes and decimals
+    str = str.replace(/\.0+$|(\.\d*?)0+$/, "$1");
+
+    // Ensure max 12 characters
+    if (str.length > 12) {
+      return str.slice(0, 12);
+    } else {
+      return str;
+    }
   }
-
-  // Trim trailing zeroes and decimals
-  str = str.replace(/\.0+$|(\.\d*?)0+$/, "$1");
-
-  // Ensure max 12 characters
-  return str.length > 12 ? str.slice(0, 12) : str;
 }
